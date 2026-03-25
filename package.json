@@ -1,7 +1,7 @@
 {
     "name": "sap-cap-employee-system",
     "version": "1.0.0",
-    "description": "SAP CAP Employee Management System with XSUAA authentication and React.js frontend",
+    "description": "Employee & Workforce Management System using SAP CAP and React",
     "repository": "https://github.com/RameshPrabakar/cap-workforce-hub.git",
     "license": "UNLICENSED",
     "private": true,

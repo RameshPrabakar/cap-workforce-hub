@@ -1,4 +1,4 @@
-# SAP CAP Employee Management System
+# Employee & Workforce Management System using SAP CAP and React
 
 A comprehensive employee management system built with SAP CAP (Cloud Application Programming) and React.js.
 
