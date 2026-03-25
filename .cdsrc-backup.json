@@ -1,0 +1,68 @@
+{
+    "[development]": {
+        "requires": {
+            "middlewares": {
+                "kind": "cds"
+            },
+            "auth": {
+                "kind": "mocked",
+                "users": {
+                    "admin": {
+                        "password": "admin",
+                        "roles": [
+                            "admin"
+                        ]
+                    },
+                    "employee": {
+                        "password": "employee",
+                        "roles": [
+                            "employee"
+                        ]
+                    },
+                    "manager": {
+                        "password": "manager",
+                        "roles": [
+                            "manager",
+                            "employee"
+                        ]
+                    }
+                }
+            },
+            "db": {
+                "kind": "sqlite",
+                "credentials": {
+                    "url": "db.sqlite"
+                }
+            }
+        },
+        "odata": {
+            "version": "v4"
+        }
+    },
+    "[production]": {
+        "requires": {
+            "auth": {
+                "kind": "xsuaa"
+            },
+            "db": {
+                "kind": "hana-cloud"
+            }
+        },
+        "build": {
+            "target": "gen",
+            "tasks": [
+                {
+                    "for": "nodejs",
+                    "dest": "gen/srv"
+                },
+                {
+                    "for": "hana",
+                    "dest": "gen/db"
+                }
+            ]
+        },
+        "odata": {
+            "version": "v4"
+        }
+    }
+}

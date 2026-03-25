@@ -1,0 +1,80 @@
+_schema-version: '3.1'
+ID: employee-management-system
+version: 1.0.0
+description: "SAP CAP Employee Management System with XSUAA authentication and React.js frontend"
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  # Backend API Module
+  - name: employee-management-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: employee-management-db
+      - name: employee-management-xsuaa
+
+  # Application Router Module
+  - name: employee-management-approuter
+    type: nodejs
+    path: approuter
+    parameters:
+      buildpack: nodejs_buildpack
+      keep-existing-routes: true
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: employee-management-xsuaa
+    
+  # React Frontend Module
+  - name: employee-management-ui
+    type: html5
+    path: app/employee-portal
+    build-parameters:
+      build-result: build
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+    requires:
+      - name: employee-management-xsuaa
+
+resources:
+  # XSUAA Service
+  - name: employee-management-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: employee-management-system-${org}-${space}
+
+  # Database Service
+  - name: employee-management-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: service-manager
+      service-plan: container

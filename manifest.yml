@@ -1,0 +1,53 @@
+applications:
+- name: employee-management-srv
+  type: nodejs
+  path: .
+  buildpack: nodejs_buildpack
+  memory: 512M
+  instances: 1
+  env:
+    CDS_LOG_LEVEL: info
+  services:
+    - employee-management-db
+    - employee-management-xsuaa
+  routes:
+    - route: employee-management-srv-${org}-${space}.${default-domain}
+
+- name: employee-management-approuter
+  type: nodejs
+  path: approuter
+  buildpack: nodejs_buildpack
+  memory: 256M
+  instances: 1
+  env:
+    destinations: >
+      [
+        {
+          "name": "srv-api",
+          "url": "~{srv-url}",
+          "forwardAuthToken": true
+        },
+        {
+          "name": "employee-portal-ui",
+          "url": "./",
+          "forwardAuthToken": true
+        }
+      ]
+  requires:
+    - name: employee-management-srv
+      properties:
+        srv-url: ~{url}
+  services:
+    - employee-management-xsuaa
+  routes:
+    - route: employee-management-${org}-${space}.${default-domain}
+
+services:
+- name: employee-management-db
+  type: sqlite
+
+- name: employee-management-xsuaa
+  type: xsuaa
+  parameters:
+    service-plan: application
+    path: ./xs-security.json

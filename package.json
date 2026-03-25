@@ -1,0 +1,66 @@
+{
+    "name": "sap-cap-employee-system",
+    "version": "1.0.0",
+    "description": "SAP CAP Employee Management System with XSUAA authentication and React.js frontend",
+    "repository": "https://github.com/RameshPrabakar/cap-workforce-hub.git",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/approuter": "^20.6.0",
+        "@sap/audit-logging": "^6.7.1",
+        "@sap/cds": "^8",
+        "@sap/xsenv": "^5.6.1",
+        "@sap/xssec": "^4.8.0",
+        "express": "^4.21.2",
+        "passport": "^0.7.0"
+    },
+    "devDependencies": {
+        "@cap-js/sqlite": "^1",
+        "@sap/cds-dk": "^8",
+        "concurrently": "^9.2.0"
+    },
+    "scripts": {
+        "start": "cds run",
+        "serve": "cds run --with-mocks",
+        "watch": "cds watch",
+        "build": "npm run build:react && cds build --production",
+        "build:react": "cd app/employee-portal && npm run build",
+        "dev": "concurrently \"npm run watch\" \"cd app/employee-portal && npm start\"",
+        "deploy": "cds deploy",
+        "deploy:cf": "npm run build && mbt build && cf deploy mta_archives/employee-management-system_1.0.0.mtar",
+        "test": "echo 'No tests configured yet' && exit 0",
+        "lint": "echo 'No linting configured yet' && exit 0"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "cds": {
+        "requires": {
+            "db": {
+                "kind": "sqlite",
+                "credentials": {
+                    "url": "db.sqlite"
+                }
+            }
+        },
+        "build": {
+            "target": "gen",
+            "tasks": [
+                {
+                    "for": "nodejs",
+                    "dest": "gen/srv"
+                },
+                {
+                    "for": "hana",
+                    "dest": "gen/db"
+                }
+            ]
+        },
+        "features": {
+            "preserve_computed": true
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        }
+    }
+}

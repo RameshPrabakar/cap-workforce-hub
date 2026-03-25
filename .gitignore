@@ -1,0 +1,103 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# node_modules
+node_modules/
+*/node_modules/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Runtime files
+*.tgz
+*.tar.gz
+
+# SAP CAP specific
+.env*
+!.env.example
+_out/
+gen/
+dist/
+build/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# CAP service files
+fiori-tools.json
+
+# MTA build artifacts
+mta_archives/
+.mta/
+Makefile*.mta
+
+# React build
+app/*/build/
+app/*/dist/
+
+# Logs and temporary files
+tmp/
+temp/
+
+# Local development certificates
+*.pem
+*.key
+*.crt
+
+# SAP specific
+.sap/
+default-env.json
+
+# Backup files
+*.bak
+*.backup
+
+# Security files (keep templates, exclude actual configs)
+xs-security-local.json
+.env.local
+.env.production.local
+
+# Application specific
+memory
+
+# Service keys
+*-service-key.json

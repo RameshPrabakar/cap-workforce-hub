@@ -1,0 +1,82 @@
+{
+    "[development]": {
+        "requires": {
+            "middlewares": {
+                "kind": "cds"
+            },
+            "auth": {
+                "kind": "mocked",
+                "users": {
+                    "admin": {
+                        "password": "admin",
+                        "roles": [
+                            "admin",
+                            "Employee.Read",
+                            "Employee.Write",
+                            "Employee.Delete",
+                            "Timesheet.Approve",
+                            "Leave.Approve",
+                            "Reports.View",
+                            "Admin"
+                        ]
+                    },
+                    "employee": {
+                        "password": "employee",
+                        "roles": [
+                            "employee",
+                            "Employee.Read",
+                            "Employee.Write"
+                        ]
+                    },
+                    "manager": {
+                        "password": "manager",
+                        "roles": [
+                            "manager",
+                            "employee",
+                            "Employee.Read",
+                            "Employee.Write",
+                            "Timesheet.Approve",
+                            "Leave.Approve",
+                            "Reports.View"
+                        ]
+                    }
+                }
+            },
+            "db": {
+                "kind": "sqlite",
+                "credentials": {
+                    "url": "db.sqlite"
+                }
+            }
+        },
+        "odata": {
+            "version": "v4"
+        }
+    },
+    "[production]": {
+        "requires": {
+            "auth": {
+                "kind": "xsuaa"
+            },
+            "db": {
+                "kind": "hana-cloud"
+            }
+        },
+        "build": {
+            "target": "gen",
+            "tasks": [
+                {
+                    "for": "nodejs",
+                    "dest": "gen/srv"
+                },
+                {
+                    "for": "hana",
+                    "dest": "gen/db"
+                }
+            ]
+        },
+        "odata": {
+            "version": "v4"
+        }
+    }
+}

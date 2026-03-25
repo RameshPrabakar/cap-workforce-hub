@@ -1,0 +1,121 @@
+{
+    "xsappname": "employee-management-system",
+    "tenant-mode": "dedicated",
+    "description": "Security configuration for Employee Management System",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.Employee.Read",
+            "description": "Read employee data and personal information"
+        },
+        {
+            "name": "$XSAPPNAME.Employee.Write",
+            "description": "Create and update employee data"
+        },
+        {
+            "name": "$XSAPPNAME.Employee.Delete",
+            "description": "Delete employee records"
+        },
+        {
+            "name": "$XSAPPNAME.Department.Manage",
+            "description": "Manage department information"
+        },
+        {
+            "name": "$XSAPPNAME.Leave.Approve",
+            "description": "Approve leave requests"
+        },
+        {
+            "name": "$XSAPPNAME.Timesheet.Approve",
+            "description": "Approve timesheet entries"
+        },
+        {
+            "name": "$XSAPPNAME.Admin",
+            "description": "Full administrative access to the system"
+        },
+        {
+            "name": "$XSAPPNAME.Reports.View",
+            "description": "View reports and analytics"
+        }
+    ],
+    "attributes": [
+        {
+            "name": "Department",
+            "description": "Employee's department for data isolation",
+            "valueType": "string"
+        },
+        {
+            "name": "CostCenter",
+            "description": "Cost center for budget tracking",
+            "valueType": "string"
+        },
+        {
+            "name": "Region",
+            "description": "Geographic region",
+            "valueType": "string"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Employee",
+            "description": "Standard employee role with read access to own data",
+            "scope-references": [
+                "$XSAPPNAME.Employee.Read"
+            ],
+            "attribute-references": [
+                "Department",
+                "CostCenter"
+            ]
+        },
+        {
+            "name": "TeamLead",
+            "description": "Team lead role with limited management capabilities",
+            "scope-references": [
+                "$XSAPPNAME.Employee.Read",
+                "$XSAPPNAME.Employee.Write",
+                "$XSAPPNAME.Leave.Approve",
+                "$XSAPPNAME.Timesheet.Approve"
+            ],
+            "attribute-references": [
+                "Department",
+                "CostCenter"
+            ]
+        },
+        {
+            "name": "HRManager",
+            "description": "HR Manager with employee management rights",
+            "scope-references": [
+                "$XSAPPNAME.Employee.Read",
+                "$XSAPPNAME.Employee.Write",
+                "$XSAPPNAME.Employee.Delete",
+                "$XSAPPNAME.Department.Manage",
+                "$XSAPPNAME.Leave.Approve",
+                "$XSAPPNAME.Reports.View"
+            ],
+            "attribute-references": [
+                "Region"
+            ]
+        },
+        {
+            "name": "SystemAdmin",
+            "description": "System administrator with full access",
+            "scope-references": [
+                "$XSAPPNAME.Employee.Read",
+                "$XSAPPNAME.Employee.Write",
+                "$XSAPPNAME.Employee.Delete",
+                "$XSAPPNAME.Department.Manage",
+                "$XSAPPNAME.Leave.Approve",
+                "$XSAPPNAME.Timesheet.Approve",
+                "$XSAPPNAME.Admin",
+                "$XSAPPNAME.Reports.View"
+            ]
+        }
+    ],
+    "oauth2-configuration": {
+        "token-validity": 3600,
+        "refresh-token-validity": 86400,
+        "redirect-uris": [
+            "https://localhost:4004/**",
+            "https://*.cfapps.sap.hana.ondemand.com/**",
+            "https://*.hana.ondemand.com/**"
+        ]
+    }
+}
